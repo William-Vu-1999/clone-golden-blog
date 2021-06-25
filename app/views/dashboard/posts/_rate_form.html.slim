@@ -1,0 +1,18 @@
+
+- unless current_user&.get_rate_with(@post)
+  - 5.times.each do |i|
+    i class="far fa-star cursor-pointer" id="score-#{i+1}"
+- else
+  - current_score = current_user&.get_rate_with(@post).score.to_i
+  - left_score = 5 - current_score
+  - current_score.times do |i|
+    i class="fas fa-star cursor-pointer text-warning" id="score-#{i+1}"
+  - left_score.times do |i|
+    i class="far fa-star cursor-pointer" id="score-#{ i+current_score+1 }"
+
+= form_with url: rate_dashboard_post_path(@post), method:'post', id: "form-rate", local:false do |f|
+  = f.hidden_field :score, id:'score-field'
+  = submit_tag '', id:"submit-rating", class:'d-none'
+
+script 
+  = render partial:"dashboard/posts/rate_action.js.erb"
